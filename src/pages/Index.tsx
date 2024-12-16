@@ -1,4 +1,6 @@
 import { SlotMachine } from "@/components/SlotMachine";
+import TikTokFeed from "@/components/TikTokFeed";
+import FeaturedPlaces from "@/components/FeaturedPlaces";
 
 const Index = () => {
   return (
@@ -14,6 +16,13 @@ const Index = () => {
         </div>
         
         <SlotMachine />
+        
+        <div className="mt-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+            <TikTokFeed />
+            <FeaturedPlaces />
+          </div>
+        </div>
         
         <div className="mt-16 text-center text-gray-600">
           <p className="text-sm">
