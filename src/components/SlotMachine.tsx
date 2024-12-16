@@ -1,10 +1,48 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { useNearbyRestaurants, Restaurant } from '../services/yelpService';
 
-const SlotReel = ({ items, spinning, result, type }: { items: Restaurant[], spinning: boolean, result: Restaurant, type: string }) => {
-  const getDisplayText = (item: Restaurant) => {
+const restaurants = [
+  {
+    name: 'The Hungry Chef',
+    cuisine: 'American',
+    price: '$$',
+    rating: '4.8'
+  },
+  {
+    name: 'Sushi Master',
+    cuisine: 'Japanese',
+    price: '$$$',
+    rating: '4.7'
+  },
+  {
+    name: 'La Piazza',
+    cuisine: 'Italian',
+    price: '$$',
+    rating: '4.9'
+  },
+  {
+    name: 'Taj Palace',
+    cuisine: 'Indian',
+    price: '$$',
+    rating: '4.6'
+  },
+  {
+    name: 'Dragon Wok',
+    cuisine: 'Chinese',
+    price: '$',
+    rating: '4.5'
+  },
+  {
+    name: 'Thai Spice',
+    cuisine: 'Thai',
+    price: '$$',
+    rating: '4.7'
+  }
+];
+
+const SlotReel = ({ items, spinning, result, type }: { items: any[], spinning: boolean, result: any, type: string }) => {
+  const getDisplayText = (item: any) => {
     switch(type) {
       case 'name':
         return item.name;
@@ -36,26 +74,11 @@ const SlotReel = ({ items, spinning, result, type }: { items: Restaurant[], spin
 };
 
 export const SlotMachine = () => {
-  const { restaurants, loading, error } = useNearbyRestaurants();
   const [spinning, setSpinning] = useState(false);
-  const [results, setResults] = useState<Restaurant | null>(null);
+  const [results, setResults] = useState(restaurants[0]);
   const { toast } = useToast();
 
-  if (loading) {
-    return <div className="text-center">Loading restaurants...</div>;
-  }
-
-  if (error) {
-    toast({
-      title: "Notice",
-      description: error,
-      variant: "destructive",
-    });
-  }
-
   const spin = () => {
-    if (restaurants.length === 0) return;
-    
     setSpinning(true);
     
     // Generate random result
@@ -67,7 +90,7 @@ export const SlotMachine = () => {
       setResults(newResult);
       toast({
         title: "Your restaurant recommendation is ready! 🎉",
-        description: `How about ${newResult.name}? It's a ${newResult.rating}★ rated ${newResult.cuisine.toLowerCase()} restaurant in the ${newResult.price} price range.${newResult.location ? ` Located at ${newResult.location.address1}, ${newResult.location.city}.` : ''}`,
+        description: `How about ${newResult.name}? It's a ${newResult.rating}★ rated ${newResult.cuisine.toLowerCase()} restaurant in the ${newResult.price} price range.`,
       });
     }, 1000);
   };
@@ -76,9 +99,9 @@ export const SlotMachine = () => {
     <div className="flex flex-col items-center gap-8">
       <div className="bg-primary p-8 rounded-xl shadow-2xl">
         <div className="flex gap-4 mb-8 flex-wrap justify-center">
-          <SlotReel items={restaurants} spinning={spinning} result={results || restaurants[0]} type="name" />
-          <SlotReel items={restaurants} spinning={spinning} result={results || restaurants[0]} type="cuisine" />
-          <SlotReel items={restaurants} spinning={spinning} result={results || restaurants[0]} type="rating" />
+          <SlotReel items={restaurants} spinning={spinning} result={results} type="name" />
+          <SlotReel items={restaurants} spinning={spinning} result={results} type="cuisine" />
+          <SlotReel items={restaurants} spinning={spinning} result={results} type="rating" />
         </div>
         <Button 
           onClick={spin} 
